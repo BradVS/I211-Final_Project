@@ -8,7 +8,7 @@
  */
 class DvdError extends DvdIndexView {
 
-    public function display($message) {
+    public function display($message, $err) {
 
         //display page header
         parent::displayHeader("Error");
@@ -26,6 +26,7 @@ class DvdError extends DvdIndexView {
                         <h3> Sorry, but an error has occurred.</h3>
                         <div style="color: red">
                             <?= urldecode($message) ?>
+                            <?= urldecode($err) ?>
                         </div>
                         <br>
                     </td>

@@ -254,11 +254,11 @@ class DvdModel {
             if($this->dbConnection->query($sql) === TRUE) {
                 return "Renting successful!";
             } else {
-                return "Renting failed.";
+                return "Error: Renting failed.";
             }
             
         } else {
-            return "Checkout without a checkin.";
+            return "Error: Checkout without a checkin.";
         }
     }
 

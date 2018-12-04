@@ -5,3 +5,15 @@
     color: $color;
     text-decoration: $decoration;
 }
+
+@mixin buttonStyling ($background-color: grey, $padding: 10px 20px, $color: white, $border-radius: 5px, $border: none) {
+    background-color: $background-color;
+    padding: $padding;
+    color: $color;
+    border-radius: $border-radius;
+    border: $border;
+
+    &:hover{
+        cursor: pointer;
+    }
+}

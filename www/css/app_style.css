@@ -17,10 +17,9 @@ h1, h2, h3, h4, h5, h6, p {
 
 nav {
   position: fixed;
-  padding-top: 8px;
   padding-left: 20px;
   width: 100%;
-  height: 5vh;
+  height: 6vh;
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
@@ -28,11 +27,22 @@ nav {
   -ms-flex-pack: justify;
   justify-content: space-between;
   background-color: #f1f2f3; }
-  nav #searchbar form #searchtextbox {
-    height: 24px;
-    width: 15vw;
-    border-radius: 5px;
-    border: 1px black solid; }
+  nav #searchbar form {
+    margin-top: 6px; }
+    nav #searchbar form #searchtextbox {
+      height: 30px;
+      width: 15vw;
+      border: 1px black solid; }
+    nav #searchbar form #searchButton {
+      background-color: grey;
+      padding: 7px 10px;
+      color: white;
+      border-radius: 5px;
+      border: none; }
+      nav #searchbar form #searchButton:hover {
+        cursor: pointer; }
+      nav #searchbar form #searchButton:hover {
+        background-color: darkgrey; }
   nav #searchbar #suggestionDiv {
     width: 20vw;
     background-color: white;
@@ -40,25 +50,62 @@ nav {
     -webkit-box-direction: normal;
     -ms-flex-direction: column;
     flex-direction: column; }
-  nav .navLinks a {
-    margin: 0px 20px;
-    text-align: right;
-    color: black;
-    text-decoration: none; }
-    nav .navLinks a:hover {
-      text-decoration: underline; }
+  nav .navLinks {
+    margin-top: 12px; }
+    nav .navLinks a {
+      margin: 0px 20px;
+      text-align: right;
+      color: black;
+      text-decoration: none; }
+      nav .navLinks a:hover {
+        text-decoration: underline; }
 
 #navBlock {
   height: 5vh;
   width: 100%; }
 
-#detail {
-  padding: 20px;
-  height: 80vh; }
-  #detail img {
-    height: 300px; }
-  #detail p {
-    margin: 20px 20px; }
+.dvdDetails {
+  padding: 40px;
+  min-height: 89vh; }
+  .dvdDetails #main-header {
+    font-size: 24px;
+    padding: 30px 50px; }
+  .dvdDetails #detail {
+    background-color: #f1f2f3;
+    width: 100%; }
+    .dvdDetails #detail img {
+      height: 300px; }
+    .dvdDetails #detail p {
+      margin: 20px 20px; }
+  .dvdDetails #button-group {
+    width: 20vw;
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    margin: 20px 40px;
+    -webkit-box-pack: justify;
+    -ms-flex-pack: justify;
+    justify-content: space-between; }
+    .dvdDetails #button-group #edit-button {
+      background-color: orange;
+      padding: 10px 20px;
+      color: white;
+      border-radius: 5px;
+      border: none; }
+      .dvdDetails #button-group #edit-button:hover {
+        cursor: pointer; }
+      .dvdDetails #button-group #edit-button:hover {
+        background-color: grey; }
+    .dvdDetails #button-group #rent-button {
+      background-color: orange;
+      padding: 10px 20px;
+      color: white;
+      border-radius: 5px;
+      border: none; }
+      .dvdDetails #button-group #rent-button:hover {
+        cursor: pointer; }
+      .dvdDetails #button-group #rent-button:hover {
+        background-color: grey; }
 
 .frontPage {
   height: 90vh;
