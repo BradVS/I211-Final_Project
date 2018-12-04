@@ -24,6 +24,7 @@ return array(
     'DvdModel' => $baseDir . '/models/dvd_model.class.php',
     'DvdSearch' => $baseDir . '/views/dvd/search/dvd_search.class.php',
     'IndexView' => $baseDir . '/views/index_view.class.php',
+    'PasswordMatchException' => $baseDir . '/exceptions/password_match_exception.class.php',
     'UserController' => $baseDir . '/controllers/user_controller.class.php',
     'UserCreate' => $baseDir . '/views/user/register/user_create.class.php',
     'UserLogin' => $baseDir . '/views/user/login/user_login.class.php',

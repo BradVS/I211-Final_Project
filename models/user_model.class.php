@@ -32,13 +32,37 @@ class UserModel {
         
 
         //construct an INSERT query
-        $sql = "INSERT INTO " . $this->db->getUserTable() . " VALUES(NULL, '$username', '$hashed_password', '$name', '$email', '$address', '$city', '$state', '$zip', '$country', 1)";
-        
-        //execute the query and return true if successful or false if failed
-        if($this->dbConnection->query($sql) === TRUE) {
-            return true;
-        } else {
-            return false;
+//        $sql = "INSERT INTO " . $this->db->getUserTable() . " VALUES(NULL, '$username', '$hashed_password', '$name', '$email', '$address', '$city', '$state', '$zip', '$country', 1)";
+//        
+//        //execute the query and return true if successful or false if failed
+//        if($this->dbConnection->query($sql) === TRUE) {
+//            return true;
+//        } else {
+//            return false;
+//        }
+//        
+        try{
+            if(strlen($password) < 5){
+                throw new DataLengthException("Error: Your password is too short. It must be at least 5 characters long!");
+            }
+            
+            //construct an INSERT query
+            $sql = "INSERT INTO " . $this->db->getUserTable() . " VALUES(NULL, '$username', '$hashed_password', '$name', '$email', '$address', '$city', '$state', '$zip', '$country', 1)";
+
+            //execute the query and return true if successful or false if failed
+            if($this->dbConnection->query($sql) === TRUE) {
+                return "Your account has been successfully created.";
+            } else {
+//                return false;
+                throw new DatabaseException("Error: Database could not be reached, Please try again later.");
+            }
+            
+        } catch (DataLengthException $ex) {
+            return $ex->getMessage();
+        } catch(DatabaseException $ex){
+            return $ex->getMessage();
+        } catch (Exception $ex){
+            return $ex->getMessage();
         }
     }
     
@@ -49,25 +73,57 @@ class UserModel {
         $username = trim(filter_input(INPUT_POST, 'username', FILTER_SANITIZE_STRING));
         $password = trim(filter_input(INPUT_POST, 'password', FILTER_SANITIZE_STRING));
 
-        //sql statement to filter the users table data with a username
-        $sql = "SELECT password, account_type, id FROM " . $this->db->getUserTable() . " WHERE username='$username'";
-  
-       //execute the query
-        $query = $this->dbConnection->query($sql);
+//        //sql statement to filter the users table data with a username
+//        $sql = "SELECT password, account_type, id FROM " . $this->db->getUserTable() . " WHERE username='$username'";
+//  
+//       //execute the query
+//        $query = $this->dbConnection->query($sql);
+//        
+//        //verify password; if password is valid, set a temporary cookie
+//        if($query AND $query->num_rows > 0) {
+//            $result_row = $query->fetch_assoc();
+//            $hash = $result_row['password'];
+//            if (password_verify($password, $hash)) {
+//                setcookie("user", $username, time()+3600, '/');
+//                setcookie("user_id", $result_row['id'], time()+3600, '/');
+//                setcookie("account_type", $result_row['account_type'], time()+3600, '/');
+//                return true;
+//            }
+//        }
+//        
+//        return false;
         
-        //verify password; if password is valid, set a temporary cookie
-        if($query AND $query->num_rows > 0) {
-            $result_row = $query->fetch_assoc();
-            $hash = $result_row['password'];
-            if (password_verify($password, $hash)) {
-                setcookie("user", $username, time()+3600, '/');
-                setcookie("user_id", $result_row['id'], time()+3600, '/');
-                setcookie("account_type", $result_row['account_type'], time()+3600, '/');
-                return true;
+        try{
+            
+            //sql statement to filter the users table data with a username
+            $sql = "SELECT password, account_type, id FROM " . $this->db->getUserTable() . " WHERE username='$username'";
+
+           //execute the query
+            $query = $this->dbConnection->query($sql);
+
+            //verify password; if password is valid, set a temporary cookie
+            if($query AND $query->num_rows > 0) {
+                $result_row = $query->fetch_assoc();
+                $hash = $result_row['password'];
+                if (password_verify($password, $hash)) {
+                    setcookie("user", $username, time()+3600, '/');
+                    setcookie("user_id", $result_row['id'], time()+3600, '/');
+                    setcookie("account_type", $result_row['account_type'], time()+3600, '/');
+                    return "You have successfully logged in.";
+                } else {
+                    throw new PasswordMatchException("Error: Your password did not match.");
+                }
+            } else {
+                throw new DatabaseException("Error: Database connection returned false or nothing.");
             }
+            
+        } catch (PasswordMatchException $ex) {
+            return $ex->getMessage();
+        } catch (DatabaseException $ex){
+            return $ex->getMessage();
+        } catch (Exception $ex){
+            return $ex->getMessage();
         }
-        
-        return false;
     }
     
     
@@ -89,17 +145,37 @@ class UserModel {
         //hash the password
         $hashed_password = password_hash($password, PASSWORD_DEFAULT);
         
-        //construct the query string
-        $sql = "UPDATE " . $this->db->getUserTable() . "SET password='$hashed_password' WHERE username='$username'";
+//        //construct the query string
+//        $sql = "UPDATE " . $this->db->getUserTable() . "SET password='$hashed_password' WHERE username='$username'";
+//        
+//        //execute the query
+//        $query = $this->dbConnection->query($sql);
+//
+//        // if the query failed, return false. 
+//        if (!$query || $this->dbConnection->affected_rows == 0){
+//            return false;
+//        }
+//        
+//        return true;
         
-        //execute the query
-        $query = $this->dbConnection->query($sql);
+        try{
+            
+            //construct the query string
+            $sql = "UPDATE " . $this->db->getUserTable() . "SET password='$hashed_password' WHERE username='$username'";
 
-        // if the query failed, return false. 
-        if (!$query || $this->dbConnection->affected_rows == 0){
-            return false;
+            //execute the query
+            $query = $this->dbConnection->query($sql);
+
+            // if the query failed, return false. 
+            if (!$query || $this->dbConnection->affected_rows == 0){
+//                return false;
+                throw new DatabaseException("Error: Database connection failed or returned nothing!");
+            } else{
+                return true;
+                
+            }
+        } catch (DatabaseException $ex) {
+            return $ex->getMessage();
         }
-        
-        return true;
     }
 }

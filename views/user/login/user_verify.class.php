@@ -11,17 +11,17 @@ class UserVerify extends IndexView {
     public function display($result) {
         parent::displayHeader("Login");
 
-        $message = $result ? "You have successfully logged in." : "Your last attempt to login failed. Please try again.";
+//        $message = $result ? "You have successfully logged in." : "Your last attempt to login failed. Please try again.";
         ?>
         <section class="logout">
             <div class="top-row">Login</div>
             <div class="middle-row">
-                <p><?= $message ?></p>
+                <p><?= $result ?></p>
             </div>
             <div class="bottom-row">
                 <span style="float: left">
                     <?php
-                    if ($result) { //if the user has logged in, display the logout button
+                    if (strpos($result, "successful") == true) { //if the user has logged in, display the logout button
                         echo "Want to log out? <a href='". BASE_URL . "/user/logout'>Logout</a>";
                     } else { //if the user has not logged in, display the login button
                         echo "Already have an account? <a href='". BASE_URL . "/user/login'>Login</a>";

@@ -25,6 +25,7 @@ class ComposerStaticInit32b9c098834f35c2f95a7715e2637f84
         'DvdModel' => __DIR__ . '/../..' . '/models/dvd_model.class.php',
         'DvdSearch' => __DIR__ . '/../..' . '/views/dvd/search/dvd_search.class.php',
         'IndexView' => __DIR__ . '/../..' . '/views/index_view.class.php',
+        'PasswordMatchException' => __DIR__ . '/../..' . '/exceptions/password_match_exception.class.php',
         'UserController' => __DIR__ . '/../..' . '/controllers/user_controller.class.php',
         'UserCreate' => __DIR__ . '/../..' . '/views/user/register/user_create.class.php',
         'UserLogin' => __DIR__ . '/../..' . '/views/user/login/user_login.class.php',
