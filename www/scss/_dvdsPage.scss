@@ -1,0 +1,36 @@
+.grid-container{
+    width: 100%;
+    padding: 30px 50px;
+    height: 135vh;
+    background-color: #f1f2f3;
+
+    .row{
+        display: flex;
+
+        .col{
+            display: flex;
+            margin: 10px 20px;
+            /*border: black 1px solid;*/
+            border-radius: 5px;
+            /*text-align: center;*/
+            padding: 5px;
+            flex-direction: column;
+            width: 15%;
+            background-color: white;
+            box-shadow: 2px 1px lightgrey;
+
+            &:hover{
+                box-shadow: 2px 1px grey;
+            }
+
+            .listTitle{
+                font-weight: 700;
+            }
+        }
+
+        img{
+            height: 300px;
+            width: 100%;
+        }
+    }
+}

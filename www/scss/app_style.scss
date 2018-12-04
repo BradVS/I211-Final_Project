@@ -1,0 +1,16 @@
+//imports all the SASS files into a singular file for creating the CSS document
+//files that are imported use a '_filename.scss' to determine that they are not processed separately
+//mixins, variables, and placeholders are put in the helper folder to determine they are not part of styling a section of the website on their own
+@import './helper/variables.scss';
+@import './helper/mixins.scss';
+
+@import './structure.scss';
+@import './nav.scss';
+
+@import './detailsPage';
+@import './frontPage.scss';
+@import './dvdsPage';
+@import './inputArea';
+@import './errorScreen';
+@import './logout';
+@import './footer.scss';

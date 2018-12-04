@@ -1,0 +1,45 @@
+.inputArea{
+    padding: 30px 50px;
+    min-height: 89vh;
+    // background-color: aqua;
+
+    .top-row{
+        font-size: 30px;
+        font-weight: 700;
+        margin-bottom: 24px;
+    }
+
+    .middle-row{
+
+        form{
+            width: 30vw;
+
+            .txtInput{
+                height: 5vh;
+                margin-bottom: 16px;
+            }
+
+            div{
+
+                .txtInput{
+                    height: 5vh;
+                    margin-bottom: 16px;
+                }
+
+                .button{
+
+                    padding: 5px 10px;
+                    border: 1px black solid;
+                    background-color: white;
+                    width: 10vw;
+                    margin-bottom: 16px;
+
+                    &:hover{
+                        cursor: pointer;
+                        background-color: $offWhite;
+                    }
+                }
+            }
+        }
+    }
+}

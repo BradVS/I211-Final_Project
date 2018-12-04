@@ -1,0 +1,7 @@
+//mixins for SASS files
+
+//styling for a tags, uses default values
+@mixin linkDefault ($color: black, $decoration: none) {
+    color: $color;
+    text-decoration: $decoration;
+}

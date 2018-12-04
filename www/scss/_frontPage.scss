@@ -1,0 +1,22 @@
+//this styles the appearance of the front page
+.frontPage {
+  height: 90vh;
+  width: 100vw;
+  padding: 20px;
+  background-color: white; 
+
+  a{
+
+    img{
+        opacity: 0.6;
+        width:400px;
+        box-shadow: 1px 1px gray;
+        transition: .3s;
+
+        &:hover{
+            opacity: 1.0;
+            box-shadow: 3px 3px 5px black;
+        }
+    }
+  }
+}

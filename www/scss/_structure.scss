@@ -1,0 +1,21 @@
+//this file is used for the document reset and other possible styling code
+
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: sans-serif;
+}
+
+html, body{
+    height: 100%;
+}
+
+h1, h2, h3, h4, h5, h6, p {
+    margin-bottom: 16px;
+}
+
+#wrapper{
+    height: 100%;
+    width: 100%;
+}
