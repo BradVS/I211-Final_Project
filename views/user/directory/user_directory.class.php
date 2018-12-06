@@ -59,7 +59,7 @@ class UserDirectory extends IndexView {
         <script>
             function confirmPromotion(username) {
                 if (confirm('Do you want to promote ' + username + ' to an Admin?')) {
-                    window.location.replace('http://localhost/mvc_final_12_3/user/make_admin?username=' + username);
+                    window.location.replace('http://localhost/mvc_final/user/make_admin?username=' + username);
                 }
             }
 

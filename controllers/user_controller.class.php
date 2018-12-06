@@ -85,4 +85,23 @@ class UserController {
         $view->display($message);
     }
 
+    //show list of users
+     public function directory(){
+        $users = $this->user_model->directory();
+        $view = new UserDirectory();
+        $view->display($users);
+    }
+    
+    //promote user to admin status
+    public function make_admin(){
+        //retrieve query terms from search form
+        $username = trim($_GET['username']);
+        if ($username == "") {
+            $view = new UserMakeAdmin(false);
+            $view->display();
+        }
+        $admin_check = $this->user_model->make_admin($username);
+        $view = new UserMakeAdmin($admin_check);
+        $view->display();
+    }
 }

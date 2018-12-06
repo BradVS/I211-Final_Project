@@ -41,6 +41,9 @@ class IndexView {
                             <a href="<?= BASE_URL ?>/dvd/index">DVD Catalog</a>
                             <a href="<?= BASE_URL ?>/index">Home</a>
                             <?php 
+                            if (isset($_COOKIE["account_type"]) && $_COOKIE["account_type"]==2){
+                                echo "<a href='".BASE_URL ."/user/directory'>User List</a>";
+                            }
                             if (!isset($_COOKIE["user"])){
                                 echo "<a href='".BASE_URL ."/user/login'>Login</a>";
                             } else {

@@ -21,10 +21,10 @@ class UserMakeAdmin {
 
     public function display() {
         if ($this->admin_check) {
-            header("Location: http://localhost/mvc_final_12_3/user/directory");
+            header("Location: http://localhost/mvc_final/user/directory");
         }
         else{
-            header("Location: http://localhost/mvc_final_12_3/user/directory?no_promotion=1");
+            header("Location: http://localhost/mvc_final/user/directory?no_promotion=1");
         }
     }
 

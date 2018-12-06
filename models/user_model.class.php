@@ -178,4 +178,53 @@ class UserModel {
             return $ex->getMessage();
         }
     }
+    
+    //list of users, needs to be updated to try/catch
+    public function directory() {
+        /* construct the sql SELECT statement in this format
+         * SELECT ...
+         * FROM ...
+         * WHERE ...
+         */
+
+        $sql = "SELECT * FROM " . $this->db->getUserTable();
+
+        //execute the query
+        $query = $this->dbConnection->query($sql);
+
+        // if the query failed, return false. 
+        if (!$query)
+            return false;
+
+        //if the query succeeded, but no users were found.
+        if ($query->num_rows == 0)
+            return 0;
+
+        //handle the result
+        //create an array to store all returned dvds
+        $users = array();
+
+        //loop through all rows in the returned recordsets
+        while ($obj = $query->fetch_object()) {
+            $user = new User(stripslashes($obj->username), stripslashes($obj->name), 
+                    stripslashes($obj->email), stripslashes($obj->account_type));
+            //add the dvd into the array
+            $users[] = $user;
+        }
+        return $users;
+    }
+    
+    
+    //promote to admin
+    public function make_admin($username){
+        //find the username and change to admin account
+         $sql = "UPDATE `users` SET account_type=2 WHERE username = '$username'";
+        //execute query
+        $query = $this->dbConnection->query($sql);
+        //check to see if it worked
+        if (!$query || $this->dbConnection->affected_rows == 0) {
+            return false;
+        }
+        return true;
+    }
 }
