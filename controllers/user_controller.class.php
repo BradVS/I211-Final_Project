@@ -97,7 +97,7 @@ class UserController {
         //retrieve query terms from search form
         $username = trim($_GET['username']);
         if ($username == "") {
-            $view = new UserMakeAdmin(false);
+            $view = new UserMakeAdmin("No user selected");
             $view->display();
         }
         $admin_check = $this->user_model->make_admin($username);

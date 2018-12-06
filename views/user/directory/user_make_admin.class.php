@@ -20,11 +20,11 @@ class UserMakeAdmin {
     }
 
     public function display() {
-        if ($this->admin_check) {
+        if ($this->admin_check == 'promoted') {
             header("Location: http://localhost/mvc_final/user/directory");
         }
         else{
-            header("Location: http://localhost/mvc_final/user/directory?no_promotion=1");
+            header("Location: http://localhost/mvc_final/user/directory?error_message=" . $this->admin_check);
         }
     }
 

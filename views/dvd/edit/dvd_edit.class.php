@@ -36,7 +36,7 @@ class DvdEdit extends DvdIndexView {
         <form class="new-media"  action='<?= BASE_URL . "/dvd/update/" . $id ?>' method="post" style="border: 1px solid #bbb; margin-top: 10px; padding: 10px;">
           <input type="hidden" name="id" value="<?= $id ?>">
             <p><strong>Title</strong><br>
-                <input name="title" type="text" size="100" value="<?= $title ?>" required autofocus></p>
+                <input name="title" type="text" size="100" value="<?= $title ?>" autofocus></p>
             <p><strong>Rating</strong>:
                 <?php
                 foreach ($ratings as $m_rating => $m_id) {
@@ -45,19 +45,19 @@ class DvdEdit extends DvdIndexView {
                 }
                 ?>
             </p>
-            <p><strong>Release Date</strong>: <input name="release_date" type="date" value="<?= $release_date->format('Y-m-d') ?>" required=""></p>
+            <p><strong>Release Date</strong>: <input name="release_date" type="date" value="<?= $release_date->format('Y-m-d') ?>"></p>
             <p><strong>Directors</strong>: Separate directors with commas<br>
-                <input name="director" type="text" size="40" value="<?= $director ?>" required=""></p>
+                <input name="director" type="text" size="40" value="<?= $director ?>"></p>
             <p><strong>Image</strong>: url (http:// or https://) or local file including path and file extension<br>
-                <input name="image" type="text" size="100" required value="<?= $image ?>"></p>
+                <input name="image" type="text" size="100" value="<?= $image ?>"></p>
             <p><strong>Description</strong>:<br>
                 <textarea name="description" rows="8" cols="100"><?= $description ?></textarea></p>
             <p><strong>Runtime</strong>:<br>
-                <input name="runtime" type="number" size="100" required value="<?= $runtime ?>"></p>
+                <input name="runtime" type="number" size="100" value="<?= $runtime ?>"></p>
             <p><strong>Price</strong>:<br>
-                <input name="price" type="number" step=".01" size="100" required value="<?= $price ?>"></p>
+                <input name="price" type="number" step=".01" size="100"value="<?= $price ?>"></p>
             <p><strong>Available</strong>:<br>
-                <input name="available" type="number" size="100" required value="<?= $available ?>"></p>
+                <input name="available" type="number" size="100"value="<?= $available ?>"></p>
             <input type="submit" name="action" value="Update Dvd">
             <input type="button" value="Cancel" onclick='window.location.href = "<?= BASE_URL . "/dvd/detail/" . $id ?>"'>  
         </form>

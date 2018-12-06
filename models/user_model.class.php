@@ -46,6 +46,10 @@ class UserModel {
                 throw new DataLengthException("Error: Your password is too short. It must be at least 5 characters long!");
             }
             
+            if($username == "" || $name == "" || $email = "" || $address == "" || $city == "" || $state == "" || $zip == "" || $country == ""){
+                throw new DataMissingException("Error: A field was missing information.");
+            }
+            
             //construct an INSERT query
             $sql = "INSERT INTO " . $this->db->getUserTable() . " VALUES(NULL, '$username', '$hashed_password', '$name', '$email', '$address', '$city', '$state', '$zip', '$country', 1)";
 
@@ -60,6 +64,8 @@ class UserModel {
         } catch (DataLengthException $ex) {
             return $ex->getMessage();
         } catch(DatabaseException $ex){
+            return $ex->getMessage();
+        } catch (DataMissingException $ex){
             return $ex->getMessage();
         } catch (Exception $ex){
             return $ex->getMessage();
@@ -94,6 +100,9 @@ class UserModel {
 //        return false;
         
         try{
+            if($username == "" || $password == ""){
+                throw new DataMissingException("Error: A field was left empty.");
+            }
             
             //sql statement to filter the users table data with a username
             $sql = "SELECT password, account_type, id FROM " . $this->db->getUserTable() . " WHERE username='$username'";
@@ -117,6 +126,8 @@ class UserModel {
                 throw new DatabaseException("Error: Database connection returned false or nothing.");
             }
             
+        } catch (DataMissingException $ex){
+            return $ex->getMessage();
         } catch (PasswordMatchException $ex) {
             return $ex->getMessage();
         } catch (DatabaseException $ex){
@@ -217,14 +228,19 @@ class UserModel {
     
     //promote to admin
     public function make_admin($username){
+        
+        try{
         //find the username and change to admin account
          $sql = "UPDATE `users` SET account_type=2 WHERE username = '$username'";
         //execute query
         $query = $this->dbConnection->query($sql);
         //check to see if it worked
         if (!$query || $this->dbConnection->affected_rows == 0) {
-            return false;
+            throw new DatabaseException("Error: Could not promote user to admin");
         }
-        return true;
+        return "promoted";
+        } catch (DatabaseException $ex) {
+            return $ex->getMessage();
+        }
     }
 }

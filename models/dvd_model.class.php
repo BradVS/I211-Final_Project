@@ -81,8 +81,11 @@ class DvdModel {
                 
 
             //if the query succeeded, but no dvd was found.
-            if ($query->num_rows == 0)
-                return 0;
+            if ($query->num_rows == 0){
+//                return 0;
+                throw new DatabaseException("Error: No DVDs were found.");
+            }
+                
 
             //handle the result
             //create an array to store all returned dvds
@@ -157,31 +160,34 @@ class DvdModel {
                     !filter_has_var(INPUT_POST, 'price') ||
                     !filter_has_var(INPUT_POST, 'image') ||
                     !filter_has_var(INPUT_POST, 'price') ||
+                    !filter_has_var(INPUT_POST, 'description') ||
                     !filter_has_var(INPUT_POST, 'available') ||
                     !filter_has_var(INPUT_POST, 'rating')) {
 
 //                return false;
                 throw new DataMissingException("Error: An input field is empty.");
+            } else {
+                //retrieve data for the new dvd; data are sanitized and escaped for security.
+                $title = $this->dbConnection->real_escape_string(trim(filter_input(INPUT_POST, 'title', FILTER_SANITIZE_STRING)));
+                $runtime = $this->dbConnection->real_escape_string(trim(filter_input(INPUT_POST, 'runtime', FILTER_SANITIZE_STRING)));
+                $rating = $this->dbConnection->real_escape_string(trim(filter_input(INPUT_POST, 'rating', FILTER_SANITIZE_STRING)));
+                $release_date = $this->dbConnection->real_escape_string(filter_input(INPUT_POST, 'release_date', FILTER_DEFAULT));
+                $director = $this->dbConnection->real_escape_string(trim(filter_input(INPUT_POST, 'director', FILTER_SANITIZE_STRING)));
+                $price = $this->dbConnection->real_escape_string(trim(filter_input(INPUT_POST, 'price', FILTER_SANITIZE_NUMBER_FLOAT, FILTER_FLAG_ALLOW_FRACTION)));
+                $image = $this->dbConnection->real_escape_string(trim(filter_input(INPUT_POST, 'image', FILTER_SANITIZE_STRING)));
+                $description = $this->dbConnection->real_escape_string(trim(filter_input(INPUT_POST, 'description', FILTER_SANITIZE_STRING)));
+                $available = $this->dbConnection->real_escape_string(trim(filter_input(INPUT_POST, 'available', FILTER_SANITIZE_STRING)));
+
+                //query string for update 
+                $sql = "UPDATE " . $this->tblDvd .
+                        " SET title='$title', runtime='$runtime', rating='$rating', release_date='$release_date', director='$director', "
+                        . "price='$price', image='$image', description='$description', available='$available' WHERE id='$id'";
+
+                //execute the query
+                return $this->dbConnection->query($sql);
             }
 
-            //retrieve data for the new dvd; data are sanitized and escaped for security.
-            $title = $this->dbConnection->real_escape_string(trim(filter_input(INPUT_POST, 'title', FILTER_SANITIZE_STRING)));
-            $runtime = $this->dbConnection->real_escape_string(trim(filter_input(INPUT_POST, 'runtime', FILTER_SANITIZE_STRING)));
-            $rating = $this->dbConnection->real_escape_string(trim(filter_input(INPUT_POST, 'rating', FILTER_SANITIZE_STRING)));
-            $release_date = $this->dbConnection->real_escape_string(filter_input(INPUT_POST, 'release_date', FILTER_DEFAULT));
-            $director = $this->dbConnection->real_escape_string(trim(filter_input(INPUT_POST, 'director', FILTER_SANITIZE_STRING)));
-            $price = $this->dbConnection->real_escape_string(trim(filter_input(INPUT_POST, 'price', FILTER_SANITIZE_NUMBER_FLOAT, FILTER_FLAG_ALLOW_FRACTION)));
-            $image = $this->dbConnection->real_escape_string(trim(filter_input(INPUT_POST, 'image', FILTER_SANITIZE_STRING)));
-            $description = $this->dbConnection->real_escape_string(trim(filter_input(INPUT_POST, 'description', FILTER_SANITIZE_STRING)));
-            $available = $this->dbConnection->real_escape_string(trim(filter_input(INPUT_POST, 'available', FILTER_SANITIZE_STRING)));
-
-            //query string for update 
-            $sql = "UPDATE " . $this->tblDvd .
-                    " SET title='$title', runtime='$runtime', rating='$rating', release_date='$release_date', director='$director', "
-                    . "price='$price', image='$image', description='$description', available='$available' WHERE id='$id'";
-
-            //execute the query
-            return $this->dbConnection->query($sql);
+            
         } catch (DataMissingException $ex) {
             return $ex->getMessage();
         }
@@ -194,7 +200,7 @@ class DvdModel {
             
         
         //trigger the function when the button in clicked.
-        if (!empty($_POST['title'])&& !FALSE) {
+        if (!empty($_POST['title'])) {
                 $title =  filter_input(INPUT_POST, "title", FILTER_SANITIZE_STRING);
                 $runtime = filter_input(INPUT_POST, 'runtime', FILTER_SANITIZE_NUMBER_INT);
                 $rating = filter_input(INPUT_POST, "rating", FILTER_SANITIZE_STRING);

@@ -17,6 +17,9 @@ class UserDirectory extends IndexView {
         ?>
         <section class="inputArea">
             <?php
+            if (isset($_GET['error_message'])){
+                echo "<h4 style='color:red'>" . $_GET['error_message'] ."</h4>";
+            }
             if ($users === 0) {
                 echo "No users in the system.<br><br><br><br><br>";
             } else {

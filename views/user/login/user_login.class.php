@@ -16,8 +16,8 @@ class UserLogin extends IndexView {
             <div class="middle-row">
                 <p>Please enter your username and password.</p>
                 <form method="post" action="<?= BASE_URL ?>/user/verify">
-                    <div><input class="txtInput" type="text" name="username" style="width: 99%" required placeholder="Username" autofocus></div>
-                    <div><input class="txtInput" type="password" name="password" style="width: 99%" required placeholder="Password"></div>
+                    <div><input class="txtInput" type="text" name="username" style="width: 99%" placeholder="Username" autofocus></div>
+                    <div><input class="txtInput" type="password" name="password" style="width: 99%" placeholder="Password"></div>
                     <div><input type="submit" class="button" value="Login"></div>
                 </form>
             </div>

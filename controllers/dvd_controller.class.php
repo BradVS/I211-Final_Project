@@ -29,7 +29,7 @@ class DvdController {
 //            return;
 //        }
         if(!is_array($dvds)){
-            if(strpos($dvds, "Error:") == true){
+            if(strpos($dvds, "Error:") !== false){
                 //display an error
                 $message = "There was a problem displaying dvds.";
                 $this->error($message, $dvds);
@@ -55,7 +55,7 @@ class DvdController {
 //            return;
 //        }
         if(!is_object($dvd)){
-            if(strpos($dvd, "Error:") == true){
+            if(strpos($dvd, "Error:") !== false){
                 //display an error
                 $message = "There was a problem displaying the dvd id='" . $id . "'.";
                 $this->error($message, $dvd);
@@ -82,7 +82,7 @@ class DvdController {
 //            return;
 //        }
         if(!is_object($dvd)){
-            if(strpos($dvd, "Error:") == true){
+            if(strpos($dvd, "Error:") !== false){
                 //display an error
                 $message = "There was a problem displaying the dvd id='" . $id . "'.";
                 $this->error($message, $dvd);
@@ -107,24 +107,27 @@ class DvdController {
 //            return;
 //        }
         
-        if(strpos($update, "Error:") == true){
+        if(strpos($update, "Error:") !== false){
             //handle errors
             $message = "There was a problem updating the dvd id='" . $id . "'.";
             $this->error($message, $update);
             return;
+        } else {
+            //display the updateed dvd details
+            $confirm = "The dvd was successfully updated.";
+            $dvd = $this->dvd_model->view_dvd($id);
+
+            $view = new DvdDetail();
+            $view->display($dvd, $confirm);
         }
 
-        //display the updateed dvd details
-        $confirm = "The dvd was successfully updated.";
-        $dvd = $this->dvd_model->view_dvd($id);
-
-        $view = new DvdDetail();
-        $view->display($dvd, $confirm);
+        
     }
 
 
     //ADMIN ONLY
     public function add() {
+        
         $view = new DvdAdd();
         $view ->display();
     }
@@ -144,7 +147,7 @@ class DvdController {
 //            return;
 //        }
         if(!is_bool($add)){
-            if(strpos($add, "Error:") == true){
+            if(strpos($add, "Error:") !== false){
                 //handle errors
                 $message = "There was a problem adding the dvd";
                 $this->error($message, $add);
@@ -177,7 +180,7 @@ class DvdController {
 //            return;
 //        }
         if(!is_array($dvds)){
-            if(strpos($dvds, "Error:") == true){
+            if(strpos($dvds, "Error:") !== false){
                 //handle error
                 $message = "An error has occurred.";
                 $this->error($message, $dvds);
@@ -210,7 +213,7 @@ class DvdController {
     public function rent($id){
         $rent = $this->dvd_model->rent_dvd($id);
         
-        if (strpos($rent, "Error:") == true) {
+        if (strpos($rent, "Error:") !== false) {
             //handle errors
             $message = "An error has occured.";
             $this->error($message, $rent);
