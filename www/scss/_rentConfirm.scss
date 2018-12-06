@@ -1,0 +1,18 @@
+.rentConfirm{
+    height: 89vh;
+    width: 100%;
+
+    #main-header{
+        padding: 30px 40px;
+        font-size: 24px;
+    }
+
+    .confirmMsg{
+        padding: 50px 40px;
+        background-color: $offWhite;
+    }
+
+    a{
+        padding-left: 40px;
+    }
+}

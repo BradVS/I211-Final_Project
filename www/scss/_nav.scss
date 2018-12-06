@@ -4,7 +4,7 @@ nav{
     // padding-top: 18px;
     padding-left: 20px;
     width: 100%;
-    height: 6vh;
+    height: 5vh;
     display: flex;
     justify-content: space-between;
     background-color: $offWhite;
@@ -12,7 +12,7 @@ nav{
     #searchbar{
 
         form{
-            margin-top: 6px;
+            margin-top: 2px;
             
             #searchtextbox{
                 height: 30px;
@@ -40,7 +40,7 @@ nav{
     }
 
     .navLinks{
-        margin-top: 12px;
+        margin-top: 8px;
 
         a{
             margin: 0px 20px;

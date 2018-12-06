@@ -143,13 +143,15 @@ class DvdController {
 //            $this->error($message);
 //            return;
 //        }
-        
-        if(strpos($add, "Error:") == true){
-            //handle errors
-            $message = "There was a problem adding the dvd";
-            $this->error($message, $add);
-            return;
+        if(!is_bool($add)){
+            if(strpos($add, "Error:") == true){
+                //handle errors
+                $message = "There was a problem adding the dvd";
+                $this->error($message, $add);
+                return;
+            }
         }
+        
 
         //return the user to the dvd index page
         $this->index();
@@ -210,13 +212,17 @@ class DvdController {
         
         if (strpos($rent, "Error:") == true) {
             //handle errors
-            $message = $rent;
+            $message = "An error has occured.";
             $this->error($message, $rent);
             return;
         }
         
+        //sends user to the confirmation page
+        $confirm = new DvdRentConfirm();
+        $confirm->display($rent);
+
         //return the user to the dvd index page
-        $this->index();
+        // $this->index();
     }
     
     //handle an error

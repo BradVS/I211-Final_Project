@@ -1,15 +1,16 @@
 .dvdDetails{
-    padding: 40px;
+    // padding: 40px;
     min-height: 89vh;
 
     #main-header{
         font-size: 24px;
-        padding: 30px 50px;
+        padding: 30px 40px;
     }
 
     #detail{
         background-color: $offWhite;
         width: 100%;
+        padding-left: 40px;
     
         img{
             height: 300px;

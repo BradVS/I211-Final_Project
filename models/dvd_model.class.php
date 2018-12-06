@@ -1,8 +1,8 @@
 <?php
 
 /*
- * Author: Louie Zhu
- * Date: Mar 6, 2016
+ * Author: Bradley Stegbauer
+ * Date: 12/04/2018
  * File: dvd_model.class.php
  * Description: the dvd model
  * 
@@ -64,35 +64,44 @@ class DvdModel {
          * WHERE ...
          */
 
-        $sql = "SELECT * FROM " . $this->tblDvd . "," . $this->tblDvdRating .
-                " WHERE " . $this->tblDvd . ".rating=" . $this->tblDvdRating . ".rating_id";
+        try{
+            
+        
+            $sql = "SELECT * FROM " . $this->tblDvd . "," . $this->tblDvdRating .
+                    " WHERE " . $this->tblDvd . ".rating=" . $this->tblDvdRating . ".rating_id";
 
-        //execute the query
-        $query = $this->dbConnection->query($sql);
+            //execute the query
+            $query = $this->dbConnection->query($sql);
 
-        // if the query failed, return false. 
-        if (!$query)
-            return false;
+            // if the query failed, return false. 
+            if (!$query){
+//                return false;
+                throw new DatabaseException("Error: Can not connect to database!");
+            }
+                
 
-        //if the query succeeded, but no dvd was found.
-        if ($query->num_rows == 0)
-            return 0;
+            //if the query succeeded, but no dvd was found.
+            if ($query->num_rows == 0)
+                return 0;
 
-        //handle the result
-        //create an array to store all returned dvds
-        $dvds = array();
+            //handle the result
+            //create an array to store all returned dvds
+            $dvds = array();
 
-        //loop through all rows in the returned recordsets
-        while ($obj = $query->fetch_object()) {
-            $dvd = new Dvd(stripslashes($obj->title), stripslashes($obj->runtime), stripslashes($obj->rating), stripslashes($obj->description), stripslashes($obj->release_date), stripslashes($obj->director), stripslashes($obj->price), stripslashes($obj->image), stripslashes($obj->available));
+            //loop through all rows in the returned recordsets
+            while ($obj = $query->fetch_object()) {
+                $dvd = new Dvd(stripslashes($obj->title), stripslashes($obj->runtime), stripslashes($obj->rating), stripslashes($obj->description), stripslashes($obj->release_date), stripslashes($obj->director), stripslashes($obj->price), stripslashes($obj->image), stripslashes($obj->available));
 
-            //set the id for the dvd
-            $dvd->setId($obj->id);
+                //set the id for the dvd
+                $dvd->setId($obj->id);
 
-            //add the dvd into the array
-            $dvds[] = $dvd;
+                //add the dvd into the array
+                $dvds[] = $dvd;
+            }
+            return $dvds;
+        } catch (DatabaseException $ex) {
+            return $ex->getMessage();
         }
-        return $dvds;
     }
 
     /*
@@ -101,138 +110,177 @@ class DvdModel {
      */
 
     public function view_dvd($id) {
-        //the select ssql statement
-        $sql = "SELECT * FROM " . $this->tblDvd . "," . $this->tblDvdRating .
-                " WHERE " . $this->tblDvd . ".rating=" . $this->tblDvdRating . ".rating_id" .
-                " AND " . $this->tblDvd . ".id='$id'";
-
-        //execute the query
-        $query = $this->dbConnection->query($sql);
-
-        if ($query && $query->num_rows > 0) {
-            $obj = $query->fetch_object();
-
-            //create a dvd object
-            $dvd = new Dvd(stripslashes($obj->title), stripslashes($obj->runtime), stripslashes($obj->rating), stripslashes($obj->description), stripslashes($obj->release_date), stripslashes($obj->director), stripslashes($obj->price), stripslashes($obj->image), stripslashes($obj->available));
+        
+        try{
             
-            //set the id for the dvd
-            $dvd->setId($obj->id);
+        
+            //the select ssql statement
+            $sql = "SELECT * FROM " . $this->tblDvd . "," . $this->tblDvdRating .
+                    " WHERE " . $this->tblDvd . ".rating=" . $this->tblDvdRating . ".rating_id" .
+                    " AND " . $this->tblDvd . ".id='$id'";
 
-            return $dvd;
+            //execute the query
+            $query = $this->dbConnection->query($sql);
+
+            if ($query && $query->num_rows > 0) {
+                $obj = $query->fetch_object();
+
+                //create a dvd object
+                $dvd = new Dvd(stripslashes($obj->title), stripslashes($obj->runtime), stripslashes($obj->rating), stripslashes($obj->description), stripslashes($obj->release_date), stripslashes($obj->director), stripslashes($obj->price), stripslashes($obj->image), stripslashes($obj->available));
+
+                //set the id for the dvd
+                $dvd->setId($obj->id);
+
+                return $dvd;
+            } else {
+//                return false;
+                throw new DatabaseException("Error: Can not connect to database.");
+            }
+
+            
+        } catch (DatabaseException $ex) {
+            return $ex->getMessage();
         }
-
-        return false;
     }
 
     //the update_dvd method updates an existing dvd in the database. Details of the dvd are posted in a form. Return true if succeed; false otherwise.
     public function update_dvd($id) {
-        //if the script did not received post data, display an error message and then terminite the script immediately
-        if (!filter_has_var(INPUT_POST, 'title') ||
-                !filter_has_var(INPUT_POST, 'runtime') ||
-                !filter_has_var(INPUT_POST, 'rating') ||
-                !filter_has_var(INPUT_POST, 'release_date') ||
-                !filter_has_var(INPUT_POST, 'director') ||
-                !filter_has_var(INPUT_POST, 'price') ||
-                !filter_has_var(INPUT_POST, 'image') ||
-                !filter_has_var(INPUT_POST, 'price') ||
-                !filter_has_var(INPUT_POST, 'available') ||
-                !filter_has_var(INPUT_POST, 'rating')) {
+        try{
+            
+        
+            //if the script did not received post data, display an error message and then terminite the script immediately
+            if (!filter_has_var(INPUT_POST, 'title') ||
+                    !filter_has_var(INPUT_POST, 'runtime') ||
+                    !filter_has_var(INPUT_POST, 'rating') ||
+                    !filter_has_var(INPUT_POST, 'release_date') ||
+                    !filter_has_var(INPUT_POST, 'director') ||
+                    !filter_has_var(INPUT_POST, 'price') ||
+                    !filter_has_var(INPUT_POST, 'image') ||
+                    !filter_has_var(INPUT_POST, 'price') ||
+                    !filter_has_var(INPUT_POST, 'available') ||
+                    !filter_has_var(INPUT_POST, 'rating')) {
 
-            return false;
+//                return false;
+                throw new DataMissingException("Error: An input field is empty.");
+            }
+
+            //retrieve data for the new dvd; data are sanitized and escaped for security.
+            $title = $this->dbConnection->real_escape_string(trim(filter_input(INPUT_POST, 'title', FILTER_SANITIZE_STRING)));
+            $runtime = $this->dbConnection->real_escape_string(trim(filter_input(INPUT_POST, 'runtime', FILTER_SANITIZE_STRING)));
+            $rating = $this->dbConnection->real_escape_string(trim(filter_input(INPUT_POST, 'rating', FILTER_SANITIZE_STRING)));
+            $release_date = $this->dbConnection->real_escape_string(filter_input(INPUT_POST, 'release_date', FILTER_DEFAULT));
+            $director = $this->dbConnection->real_escape_string(trim(filter_input(INPUT_POST, 'director', FILTER_SANITIZE_STRING)));
+            $price = $this->dbConnection->real_escape_string(trim(filter_input(INPUT_POST, 'price', FILTER_SANITIZE_NUMBER_FLOAT, FILTER_FLAG_ALLOW_FRACTION)));
+            $image = $this->dbConnection->real_escape_string(trim(filter_input(INPUT_POST, 'image', FILTER_SANITIZE_STRING)));
+            $description = $this->dbConnection->real_escape_string(trim(filter_input(INPUT_POST, 'description', FILTER_SANITIZE_STRING)));
+            $available = $this->dbConnection->real_escape_string(trim(filter_input(INPUT_POST, 'available', FILTER_SANITIZE_STRING)));
+
+            //query string for update 
+            $sql = "UPDATE " . $this->tblDvd .
+                    " SET title='$title', runtime='$runtime', rating='$rating', release_date='$release_date', director='$director', "
+                    . "price='$price', image='$image', description='$description', available='$available' WHERE id='$id'";
+
+            //execute the query
+            return $this->dbConnection->query($sql);
+        } catch (DataMissingException $ex) {
+            return $ex->getMessage();
         }
-
-        //retrieve data for the new dvd; data are sanitized and escaped for security.
-        $title = $this->dbConnection->real_escape_string(trim(filter_input(INPUT_POST, 'title', FILTER_SANITIZE_STRING)));
-        $runtime = $this->dbConnection->real_escape_string(trim(filter_input(INPUT_POST, 'runtime', FILTER_SANITIZE_STRING)));
-        $rating = $this->dbConnection->real_escape_string(trim(filter_input(INPUT_POST, 'rating', FILTER_SANITIZE_STRING)));
-        $release_date = $this->dbConnection->real_escape_string(filter_input(INPUT_POST, 'release_date', FILTER_DEFAULT));
-        $director = $this->dbConnection->real_escape_string(trim(filter_input(INPUT_POST, 'director', FILTER_SANITIZE_STRING)));
-        $price = $this->dbConnection->real_escape_string(trim(filter_input(INPUT_POST, 'price', FILTER_SANITIZE_NUMBER_FLOAT, FILTER_FLAG_ALLOW_FRACTION)));
-        $image = $this->dbConnection->real_escape_string(trim(filter_input(INPUT_POST, 'image', FILTER_SANITIZE_STRING)));
-        $description = $this->dbConnection->real_escape_string(trim(filter_input(INPUT_POST, 'description', FILTER_SANITIZE_STRING)));
-        $available = $this->dbConnection->real_escape_string(trim(filter_input(INPUT_POST, 'available', FILTER_SANITIZE_STRING)));
-
-        //query string for update 
-        $sql = "UPDATE " . $this->tblDvd .
-                " SET title='$title', runtime='$runtime', rating='$rating', release_date='$release_date', director='$director', "
-                . "price='$price', image='$image', description='$description', available='$available' WHERE id='$id'";
-
-        //execute the query
-        return $this->dbConnection->query($sql);
     }
 
     //add a new DVD to the database
     public function insert_dvd() {
+        
+        try{
+            
+        
         //trigger the function when the button in clicked.
-    if (!empty($_POST['title'])&& !FALSE) {
-            $title =  filter_input(INPUT_POST, "title", FILTER_SANITIZE_STRING);
-            $runtime = filter_input(INPUT_POST, 'runtime', FILTER_SANITIZE_NUMBER_INT);
-            $rating = filter_input(INPUT_POST, "rating", FILTER_SANITIZE_STRING);
-            $release_date = filter_input(INPUT_POST, 'release_date', FILTER_DEFAULT);
-            $director = filter_input(INPUT_POST, "director", FILTER_SANITIZE_STRING);
-            $price = filter_input(INPUT_POST, "price", FILTER_SANITIZE_NUMBER_FLOAT, FILTER_FLAG_ALLOW_FRACTION);
-            $image = filter_input(INPUT_POST, "image", FILTER_SANITIZE_STRING);
-            $description = filter_input(INPUT_POST, "description", FILTER_SANITIZE_STRING);
-            $available = filter_input(INPUT_POST, 'available', FILTER_SANITIZE_NUMBER_INT);
+        if (!empty($_POST['title'])&& !FALSE) {
+                $title =  filter_input(INPUT_POST, "title", FILTER_SANITIZE_STRING);
+                $runtime = filter_input(INPUT_POST, 'runtime', FILTER_SANITIZE_NUMBER_INT);
+                $rating = filter_input(INPUT_POST, "rating", FILTER_SANITIZE_STRING);
+                $release_date = filter_input(INPUT_POST, 'release_date', FILTER_DEFAULT);
+                $director = filter_input(INPUT_POST, "director", FILTER_SANITIZE_STRING);
+                $price = filter_input(INPUT_POST, "price", FILTER_SANITIZE_NUMBER_FLOAT, FILTER_FLAG_ALLOW_FRACTION);
+                $image = filter_input(INPUT_POST, "image", FILTER_SANITIZE_STRING);
+                $description = filter_input(INPUT_POST, "description", FILTER_SANITIZE_STRING);
+                $available = filter_input(INPUT_POST, 'available', FILTER_SANITIZE_NUMBER_INT);
 
-           
 
-            //Insert data into table
-            //query string for INSERT 
-            $sql = "INSERT INTO " . $this->tblDvd . " VALUES(NULL, '$title', '$runtime', '$rating', '$description', '$release_date', '$director', '$price', '$image', '$available')";
-            // $sql = "INSERT INTO " . $this->tblDvd .
-            //         " SET title='$title', runtime='$runtime', rating='$rating', release_date='$release_date', director='$director', "
-            //         . "price='$price', image='$image', description='$description', available='$available' ";
 
-            //execute the query and return true if successful or false if failed
-            if($this->dbConnection->query($sql) === TRUE) {
-                return true;
-            } else {
-                return false;
+                //Insert data into table
+                //query string for INSERT 
+                $sql = "INSERT INTO " . $this->tblDvd . " VALUES(NULL, '$title', '$runtime', '$rating', '$description', '$release_date', '$director', '$price', '$image', '$available')";
+                // $sql = "INSERT INTO " . $this->tblDvd .
+                //         " SET title='$title', runtime='$runtime', rating='$rating', release_date='$release_date', director='$director', "
+                //         . "price='$price', image='$image', description='$description', available='$available' ";
+
+                //execute the query and return true if successful or false if failed
+                if($this->dbConnection->query($sql) === TRUE) {
+                    return true;
+                } else {
+//                    return false;
+                    throw new DatabaseException("Error: Can not connect to database.");
+                }
+            } else{
+//                return false;
+                throw new DataMissingException("Error: Data is missing in user input");
             }
+            
+        } catch (DatabaseException $ex) {
+            return $ex->getMessage();
+        } catch (DataMissingException $ex){
+            return $ex->getMessage();
         }
-        return false;
     }
 
     //search the database for dvds that match words in titles. Return an array of dvds if succeed; false otherwise.
     public function search_dvd($terms) {
-        $terms = explode(" ", $terms); //explode multiple terms into an array
-        //select statement for AND serach
-        $sql = "SELECT * FROM " . $this->tblDvd . "," . $this->tblDvdRating .
-                " WHERE " . $this->tblDvd . ".rating=" . $this->tblDvdRating . ".rating_id AND (1";
+        try{
+            
+        
+            $terms = explode(" ", $terms); //explode multiple terms into an array
+            //select statement for AND serach
+            $sql = "SELECT * FROM " . $this->tblDvd . "," . $this->tblDvdRating .
+                    " WHERE " . $this->tblDvd . ".rating=" . $this->tblDvdRating . ".rating_id AND (1";
 
-        foreach ($terms as $term) {
-            $sql .= " AND title LIKE '%" . $term . "%'";
+            foreach ($terms as $term) {
+                $sql .= " AND title LIKE '%" . $term . "%'";
+            }
+
+            $sql .= ")";
+
+            //execute the query
+            $query = $this->dbConnection->query($sql);
+
+            // the search failed, return false. 
+            if (!$query){
+//                return false;
+                throw new DatabaseException("Error: Cannot connect to database.");
+            }
+                
+
+            //search succeeded, but no dvd was found.
+            if ($query->num_rows == 0)
+                return 0;
+
+            //search succeeded, and found at least 1 dvd found.
+            //create an array to store all the returned dvds
+            $dvds = array();
+
+            //loop through all rows in the returned recordsets
+            while ($obj = $query->fetch_object()) {
+                $dvd = new Dvd($obj->title, $obj->runtime, $obj->rating, $obj->description, $obj->release_date, $obj->director, $obj->price, $obj->image, $obj->available);
+
+                //set the id for the dvd
+                $dvd->setId($obj->id);
+
+                //add the dvd into the array
+                $dvds[] = $dvd;
+            }
+            return $dvds;
+        } catch (DatabaseException $ex) {
+            $ex->getMessage();
         }
-
-        $sql .= ")";
-
-        //execute the query
-        $query = $this->dbConnection->query($sql);
-
-        // the search failed, return false. 
-        if (!$query)
-            return false;
-
-        //search succeeded, but no dvd was found.
-        if ($query->num_rows == 0)
-            return 0;
-
-        //search succeeded, and found at least 1 dvd found.
-        //create an array to store all the returned dvds
-        $dvds = array();
-
-        //loop through all rows in the returned recordsets
-        while ($obj = $query->fetch_object()) {
-            $dvd = new Dvd($obj->title, $obj->runtime, $obj->rating, $obj->description, $obj->release_date, $obj->director, $obj->price, $obj->image, $obj->available);
-
-            //set the id for the dvd
-            $dvd->setId($obj->id);
-
-            //add the dvd into the array
-            $dvds[] = $dvd;
-        }
-        return $dvds;
     }
     
     //rent a dvd
@@ -241,24 +289,33 @@ class DvdModel {
         $user_id = $_COOKIE['user_id'];
         $date = date("Y-m-d");
         
-        $sql = "SELECT * FROM checkout LEFT JOIN checkin ON checkout.id = checkin.checkout_id WHERE checkin.checkout_id IS NULL AND checkout.user_id = '$user_id' UNION SELECT * FROM checkout RIGHT JOIN checkin ON checkout.id = checkin.checkout_id WHERE checkin.checkout_id IS NULL AND checkout.user_id = '$user_id'";
+        try{
+            
         
-        //execute the query
-        $query = $this->dbConnection->query($sql);
+        
+            $sql = "SELECT * FROM checkout LEFT JOIN checkin ON checkout.id = checkin.checkout_id WHERE checkin.checkout_id IS NULL AND checkout.user_id = '$user_id' UNION SELECT * FROM checkout RIGHT JOIN checkin ON checkout.id = checkin.checkout_id WHERE checkin.checkout_id IS NULL AND checkout.user_id = '$user_id'";
 
-        if ($query->num_rows == 0) {
-            
-            $sql = "INSERT INTO ". $this->tblCheckout . " VALUES (NULL, '$id', '$user_id', '$date')";
-            
-            //execute the query and return true if successful or false if failed
-            if($this->dbConnection->query($sql) === TRUE) {
-                return "Renting successful!";
+            //execute the query
+            $query = $this->dbConnection->query($sql);
+
+            if ($query->num_rows == 0) {
+
+                $sql = "INSERT INTO ". $this->tblCheckout . " VALUES (NULL, '$id', '$user_id', '$date')";
+
+                //execute the query and return true if successful or false if failed
+                if($this->dbConnection->query($sql) === TRUE) {
+                    return "Renting successful!";
+                } else {
+//                    return "Error: Renting failed.";
+                    throw new DatabaseException("Error: Cannot connect to database.");
+                }
+
             } else {
-                return "Error: Renting failed.";
+//                return "Error: Checkout without a checkin.";
+                throw new DatabaseException("Error: User is already renting a dvd.");
             }
-            
-        } else {
-            return "Error: Checkout without a checkin.";
+        } catch (DatabaseException $ex) {
+           return $ex->getMessage();
         }
     }
 

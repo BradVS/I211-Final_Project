@@ -19,7 +19,7 @@ nav {
   position: fixed;
   padding-left: 20px;
   width: 100%;
-  height: 6vh;
+  height: 5vh;
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
@@ -28,7 +28,7 @@ nav {
   justify-content: space-between;
   background-color: #f1f2f3; }
   nav #searchbar form {
-    margin-top: 6px; }
+    margin-top: 2px; }
     nav #searchbar form #searchtextbox {
       height: 30px;
       width: 15vw;
@@ -51,7 +51,7 @@ nav {
     -ms-flex-direction: column;
     flex-direction: column; }
   nav .navLinks {
-    margin-top: 12px; }
+    margin-top: 8px; }
     nav .navLinks a {
       margin: 0px 20px;
       text-align: right;
@@ -65,14 +65,14 @@ nav {
   width: 100%; }
 
 .dvdDetails {
-  padding: 40px;
   min-height: 89vh; }
   .dvdDetails #main-header {
     font-size: 24px;
-    padding: 30px 50px; }
+    padding: 30px 40px; }
   .dvdDetails #detail {
     background-color: #f1f2f3;
-    width: 100%; }
+    width: 100%;
+    padding-left: 40px; }
     .dvdDetails #detail img {
       height: 300px; }
     .dvdDetails #detail p {
@@ -112,6 +112,9 @@ nav {
   width: 100vw;
   padding: 20px;
   background-color: white; }
+  .frontPage #main-header {
+    padding: 30px 40px;
+    font-size: 24px; }
   .frontPage a img {
     opacity: 0.6;
     width: 400px;
@@ -125,16 +128,20 @@ nav {
       -webkit-box-shadow: 3px 3px 5px black;
       box-shadow: 3px 3px 5px black; }
 
-.grid-container {
+.dvdsPage #main-header {
+  padding: 30px 40px;
+  font-size: 24px; }
+
+.dvdsPage .grid-container {
   width: 100%;
   padding: 30px 50px;
   height: 135vh;
   background-color: #f1f2f3; }
-  .grid-container .row {
+  .dvdsPage .grid-container .row {
     display: -webkit-box;
     display: -ms-flexbox;
     display: flex; }
-    .grid-container .row .col {
+    .dvdsPage .grid-container .row .col {
       display: -webkit-box;
       display: -ms-flexbox;
       display: flex;
@@ -151,12 +158,12 @@ nav {
       background-color: white;
       -webkit-box-shadow: 2px 1px lightgrey;
       box-shadow: 2px 1px lightgrey; }
-      .grid-container .row .col:hover {
+      .dvdsPage .grid-container .row .col:hover {
         -webkit-box-shadow: 2px 1px grey;
         box-shadow: 2px 1px grey; }
-      .grid-container .row .col .listTitle {
+      .dvdsPage .grid-container .row .col .listTitle {
         font-weight: 700; }
-    .grid-container .row img {
+    .dvdsPage .grid-container .row img {
       height: 300px;
       width: 100%; }
 
@@ -167,23 +174,28 @@ nav {
     font-size: 30px;
     font-weight: 700;
     margin-bottom: 24px; }
-  .inputArea .middle-row form {
-    width: 30vw; }
-    .inputArea .middle-row form .txtInput {
-      height: 5vh;
-      margin-bottom: 16px; }
-    .inputArea .middle-row form div .txtInput {
-      height: 5vh;
-      margin-bottom: 16px; }
-    .inputArea .middle-row form div .button {
-      padding: 5px 10px;
-      border: 1px black solid;
-      background-color: white;
-      width: 10vw;
-      margin-bottom: 16px; }
-      .inputArea .middle-row form div .button:hover {
-        cursor: pointer;
-        background-color: #f1f2f3; }
+  .inputArea .middle-row {
+    background-color: #f1f2f3;
+    padding: 20px;
+    width: 35vw;
+    margin-bottom: 16px; }
+    .inputArea .middle-row form {
+      width: 30vw; }
+      .inputArea .middle-row form .txtInput {
+        height: 5vh;
+        margin-bottom: 16px; }
+      .inputArea .middle-row form div .txtInput {
+        height: 5vh;
+        margin-bottom: 16px; }
+      .inputArea .middle-row form div .button {
+        padding: 5px 10px;
+        border: 1px black solid;
+        background-color: white;
+        width: 10vw;
+        margin-bottom: 16px; }
+        .inputArea .middle-row form div .button:hover {
+          cursor: pointer;
+          background-color: #f1f2f3; }
 
 .errorScreen {
   padding: 20px 30px;
@@ -195,6 +207,18 @@ nav {
 .logout {
   height: 89vh;
   padding: 30px 40px; }
+
+.rentConfirm {
+  height: 89vh;
+  width: 100%; }
+  .rentConfirm #main-header {
+    padding: 30px 40px;
+    font-size: 24px; }
+  .rentConfirm .confirmMsg {
+    padding: 50px 40px;
+    background-color: #f1f2f3; }
+  .rentConfirm a {
+    padding-left: 40px; }
 
 footer {
   height: 5vh;
