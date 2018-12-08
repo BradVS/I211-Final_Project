@@ -106,20 +106,22 @@ class DvdController {
 //            $this->error($message);
 //            return;
 //        }
-        
-        if(strpos($update, "Error:") !== false){
+        if(!is_bool($update)){
+            if(strpos($update, "Error:") !== false){
             //handle errors
             $message = "There was a problem updating the dvd id='" . $id . "'.";
             $this->error($message, $update);
             return;
-        } else {
+            }
+        }
+        
             //display the updateed dvd details
             $confirm = "The dvd was successfully updated.";
             $dvd = $this->dvd_model->view_dvd($id);
 
             $view = new DvdDetail();
             $view->display($dvd, $confirm);
-        }
+        
 
         
     }
@@ -243,7 +245,7 @@ class DvdController {
         // Note: value of $name is case sensitive.
         $message = "Calling method '$name' caused errors. Route does not exist.";
 
-        $this->error($message);
+        $this->error($message, "");
         return;
     }
 }

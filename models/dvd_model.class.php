@@ -178,17 +178,42 @@ class DvdModel {
                 $description = $this->dbConnection->real_escape_string(trim(filter_input(INPUT_POST, 'description', FILTER_SANITIZE_STRING)));
                 $available = $this->dbConnection->real_escape_string(trim(filter_input(INPUT_POST, 'available', FILTER_SANITIZE_STRING)));
 
+                //checks if fields are empty
+                if($title == "" || $runtime == "" || $rating == "" || $release_date == "" || $director == "" || $price == "" || $image == "" || $description == "" || $available == ""){
+                    throw new DataMissingException("Error: An input field is empty.");
+                }
+                
+                //checks if price and integer are numeric
+                if(!is_numeric($price) || !is_numeric($available)){
+                    throw new DataMismatchException("Error: Price and Available must be numbers!");
+                }
+                
+                //checks if the date is valid
+                list($y, $m, $d) = explode("-", $release_date);
+                if(!checkdate($m, $d, $y)){
+                    throw new DataMismatchException("Error: Invalid date!");
+                }
+                
                 //query string for update 
                 $sql = "UPDATE " . $this->tblDvd .
                         " SET title='$title', runtime='$runtime', rating='$rating', release_date='$release_date', director='$director', "
                         . "price='$price', image='$image', description='$description', available='$available' WHERE id='$id'";
 
                 //execute the query
-                return $this->dbConnection->query($sql);
+//                return $this->dbConnection->query($sql);
+                if(!$this->dbConnection->query($sql)){
+                    throw new DatabaseException("Error: Database could not be reached.");
+                } else {
+                    return true;
+                }
             }
 
             
         } catch (DataMissingException $ex) {
+            return $ex->getMessage();
+        } catch (DataMismatchException $ex){
+            return $ex->getMessage();
+        } catch (DatabaseException $ex){
             return $ex->getMessage();
         }
     }
@@ -199,8 +224,8 @@ class DvdModel {
         try{
             
         
-        //trigger the function when the button in clicked.
-        if (!empty($_POST['title'])) {
+            //trigger the function when the button in clicked.
+            if (!empty($_POST['title'])) {
                 $title =  filter_input(INPUT_POST, "title", FILTER_SANITIZE_STRING);
                 $runtime = filter_input(INPUT_POST, 'runtime', FILTER_SANITIZE_NUMBER_INT);
                 $rating = filter_input(INPUT_POST, "rating", FILTER_SANITIZE_STRING);
@@ -211,7 +236,22 @@ class DvdModel {
                 $description = filter_input(INPUT_POST, "description", FILTER_SANITIZE_STRING);
                 $available = filter_input(INPUT_POST, 'available', FILTER_SANITIZE_NUMBER_INT);
 
+                //checks if fields are empty
+                if($title == "" || $runtime == "" || $rating == "" || $release_date == "" || $director == "" || $price == "" || $image == "" || $description == "" || $available == ""){
+                    throw new DataMissingException("Error: An input field is empty.");
+                }
 
+                //checks if price and available are numeric
+                if(!is_numeric($price) || !is_numeric($available)){
+                    throw new DataMismatchException("Error: Price and Available must be numbers!");
+                }
+                
+                //checks if the date is valid
+                list($y, $m, $d) = explode("-", $release_date);
+                if(!checkdate($m, $d, $y)){
+                    throw new DataMismatchException("Error: Invalid date!");
+                }
+                
 
                 //Insert data into table
                 //query string for INSERT 
@@ -235,6 +275,8 @@ class DvdModel {
         } catch (DatabaseException $ex) {
             return $ex->getMessage();
         } catch (DataMissingException $ex){
+            return $ex->getMessage();
+        } catch (DataMismatchException $ex){
             return $ex->getMessage();
         }
     }
@@ -329,19 +371,25 @@ class DvdModel {
     private function get_dvd_ratings() {
         $sql = "SELECT * FROM " . $this->tblDvdRating;
 
-        //execute the query
-        $query = $this->dbConnection->query($sql);
+        try{
+            
+        
+            //execute the query
+            $query = $this->dbConnection->query($sql);
 
-        if (!$query) {
-            return false;
-        }
+            if (!$query) {
+                return false;
+            }
 
-        //loop through all rows
-        $ratings = array();
-        while ($obj = $query->fetch_object()) {
-            $ratings[$obj->rating] = $obj->rating_id;
+            //loop through all rows
+            $ratings = array();
+            while ($obj = $query->fetch_object()) {
+                $ratings[$obj->rating] = $obj->rating_id;
+            }
+            return $ratings;
+        } catch (DatabaseException $ex) {
+
         }
-        return $ratings;
     }
 
 }

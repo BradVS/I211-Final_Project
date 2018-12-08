@@ -20,7 +20,7 @@ class UserCreate extends IndexView {
                     <div><input class='txtInput' id="password" type="password" name="password" style="width: 99%" placeholder="Password, 5 characters minimum"></div>
                     <div><input oninput="confirmPassword(this)" class='txtInput' type="password" name="confirm_password" style="width: 99%" placeholder="Confirm Password"></div>
                     <div><input class='txtInput' type = 'text' name="name" style="width: 99%" required placeholder="Name"></div>
-                    <div><input class='txtInput' type="email" name="email" style="width: 99%" required="" placeholder="Email"></div>
+                    <div><input class='txtInput' type="email" name="email" style="width: 99%" placeholder="Email"></div>
                     <div><input class='txtInput' type = 'text' name="address" style="width: 99%" required placeholder="Address"></div>
                     <div><input class='txtInput' type = 'text' name="city" style="width: 99%" required placeholder="City"></div>
                     <div><input class='txtInput' type = 'text' name="state" style="width: 99%" required placeholder="State"></div>

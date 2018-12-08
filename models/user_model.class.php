@@ -30,6 +30,7 @@ class UserModel {
         $zip = filter_input(INPUT_POST, 'zip', FILTER_SANITIZE_NUMBER_INT);
         $country = filter_input(INPUT_POST, 'country', FILTER_SANITIZE_STRING);
         
+        
 
         //construct an INSERT query
 //        $sql = "INSERT INTO " . $this->db->getUserTable() . " VALUES(NULL, '$username', '$hashed_password', '$name', '$email', '$address', '$city', '$state', '$zip', '$country', 1)";
@@ -42,12 +43,24 @@ class UserModel {
 //        }
 //        
         try{
+            //checks if password is less than 5 characters
             if(strlen($password) < 5){
                 throw new DataLengthException("Error: Your password is too short. It must be at least 5 characters long!");
             }
             
-            if($username == "" || $name == "" || $email = "" || $address == "" || $city == "" || $state == "" || $zip == "" || $country == ""){
+            //checks if any field is blank
+            if($username == "" || $name == "" || $email == "" || $address == "" || $city == "" || $state == "" || $zip == "" || $country == ""){
                 throw new DataMissingException("Error: A field was missing information.");
+            }
+            
+            //checks if zip is an integer
+            if(!is_numeric($zip)){
+                throw new DataMismatchException("Error: Zip code must be an integer.");
+            }
+
+            //checks if email is an email
+            if(!filter_var($email, FILTER_VALIDATE_EMAIL)){
+                throw new DataMismatchException("Error: Email input is not an email.");
             }
             
             //construct an INSERT query
@@ -62,6 +75,8 @@ class UserModel {
             }
             
         } catch (DataLengthException $ex) {
+            return $ex->getMessage();
+        } catch (DataMismatchException $ex){
             return $ex->getMessage();
         } catch(DatabaseException $ex){
             return $ex->getMessage();
@@ -197,32 +212,42 @@ class UserModel {
          * FROM ...
          * WHERE ...
          */
+        
+        try{
+            
+        
 
-        $sql = "SELECT * FROM " . $this->db->getUserTable();
+            $sql = "SELECT * FROM " . $this->db->getUserTable();
 
-        //execute the query
-        $query = $this->dbConnection->query($sql);
+            //execute the query
+            $query = $this->dbConnection->query($sql);
 
-        // if the query failed, return false. 
-        if (!$query)
-            return false;
+            // if the query failed, return false. 
+            if (!$query){
+//                return false;
+                throw new DatabaseException("Error: Database could not be reached.");
+            }
 
-        //if the query succeeded, but no users were found.
-        if ($query->num_rows == 0)
-            return 0;
 
-        //handle the result
-        //create an array to store all returned dvds
-        $users = array();
+            //if the query succeeded, but no users were found.
+            if ($query->num_rows == 0)
+                return 0;
 
-        //loop through all rows in the returned recordsets
-        while ($obj = $query->fetch_object()) {
-            $user = new User(stripslashes($obj->username), stripslashes($obj->name), 
-                    stripslashes($obj->email), stripslashes($obj->account_type));
-            //add the dvd into the array
-            $users[] = $user;
+            //handle the result
+            //create an array to store all returned dvds
+            $users = array();
+
+            //loop through all rows in the returned recordsets
+            while ($obj = $query->fetch_object()) {
+                $user = new User(stripslashes($obj->username), stripslashes($obj->name), 
+                        stripslashes($obj->email), stripslashes($obj->account_type));
+                //add the dvd into the array
+                $users[] = $user;
+            }
+            return $users;
+        } catch (DatabaseException $ex) {
+            $ex->getMessage();
         }
-        return $users;
     }
     
     

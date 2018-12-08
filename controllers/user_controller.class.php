@@ -44,7 +44,7 @@ class UserController {
     public function verify() {
         //call the verifyUser method of the UserModel object
         $result = $this->user_model->verify_user();
-
+        
         //display result
         $view = new UserVerify();
         $view->display($result);
